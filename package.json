@@ -1,0 +1,31 @@
+{
+  "name": "goit-js-hw-12-countries",
+  "version": "1.1.0",
+  "description": "",
+  "main": "index.js",
+  "homepage": "https://AnatoliyIliev.github.io/goit-js-hw-12-countries",
+  "scripts": {
+    "dev": "parcel src/*.html",
+    "build": "parcel build src/*.html --public-url /goit-js-hw-12-countries/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnatoliyIliev/goit-js-hw-12-countries"
+  },
+  "keywords": [],
+  "author": "Anatoliy Iliev <vekok12@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AnatoliyIliev/goit-js-hw-12-countries/issues"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.10.3",
+    "parcel-plugin-handlebars-precompile": "^1.0.0",
+    "parcel-plugin-nuke-dist": "^1.0.1",
+    "posthtml-include": "^1.6.2",
+    "sass": "^1.32.8"
+  },
+  "dependencies": {
+    "core-js": "^3.13.1"
+  }
+}
