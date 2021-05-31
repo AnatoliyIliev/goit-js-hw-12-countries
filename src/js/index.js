@@ -1,1 +1,6 @@
-import './fetchCountries.js';
+import fetchCountries from './fetchCountries.js';
+
+
+
+
+console.log(fetchCountries('Ukraine'))
