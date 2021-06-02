@@ -1,6 +1,6 @@
 export default function getRefs(){
-    return refs = {
-        cardConteiner: document.querySelector('body'),
+    return {
+        cardConteiner: document.querySelector('.countries'),
         searchForm: document.querySelector('input'),
     };
 }

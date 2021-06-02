@@ -1,45 +1,55 @@
 import countriesCardTpl from '../templates/countries-cards.hbs';
+import countriesName from '../templates/countri-name.hbs';
 import API from './fetchCountries.js';
-import getRefs from './get-refs';
+import getRefs from './get-refs.js';
+
+import '@pnotify/core/dist/BrightTheme.css';
+const{ error } = require('@pnotify/core');
+
+var debounce = require('lodash.debounce');
 
 const refs = getRefs();
 
-refs.searchForm.addEventListener('input', onSearch); // проверить searchForm
-// refs.searchForm.addEventListener('change', onSearch);
+refs.searchForm.addEventListener('input', debounce(onSearch, 500));
 
 function onSearch(e) {
     e.preventDefault();
-    console.log(e);  // проверить
-    const form = e.target;  // проверить
-    console.log(form);  // проверить
-    const searchQuery = form.elements.query.value; // проверить
+    clearContainer();
+
+    const searchQuery = e.target.value;
+    console.log(API.fetchCountries(searchQuery))
 
     API.fetchCountries(searchQuery)
     .then(renderCountriCard)
     .catch(onFetchError)
-    .finally(() => form.reset());   // проверить
 }
 
-function renderCountriCard(countries) {
-    const markup = countriesCardTpl(countries);        
-    refs.cardConteiner.innerHTML = markup;
-}
-
-function onFetchError(error){
-    let debounce = require('lodash.debounce');
-// _.debounce(func, [wait=0], [options={}])
-
-// import { alert, defaultModules } from '@pnotify/core';
-// import * as PNotifyMobile from '@pnotify/mobile';
-
-// defaultModules.set(PNotifyMobile, {});
-
-// alert({
-//   text: 'Notice me, senpai!'
-// });
-
+function renderCountriCard(data) {
+    console.log(data)
+    if (data.length > 10) {
+        error({
+            text: 'To many matches found. Pleas enter a more specific query!'
+        }); 
+    }
+    else if (data.length === 1) {
+        buildListMarkup(data, countriesCardTpl)
+    }
+    else if (data.length <= 10) {
+        buildListMarkup(data, countriesName)
+    }    
 }
 
 
-const vvv = 'Ukraine'
-console.log(API.fetchCountries(vvv))
+function buildListMarkup(countryes, template) {
+  const markup = countryes.map(count => template(count)).join();
+  refs.cardConteiner.innerHTML = markup;
+}
+
+function onFetchError(error) {    
+      const Error = "You must enter query parameters!"    
+      console.log(Error)  
+}
+
+function clearContainer() {
+  refs.cardConteiner.innerHTML = '';
+}
