@@ -1,8 +1,11 @@
-const BASE_URL = 'https://restcountries.eu/rest/v2/name/'
+const BASE_URL = 'https://restcountries.eu/rest/v2';
 
-function fetchCountries(searchQuery) {
-    return fetch(`${BASE_URL}${searchQuery}`)
-        .then(response => response.json())
+export default function fetchCountries(searchQuery) {
+    return fetch(`${BASE_URL}/name/${searchQuery}`)
+        .then(response => {
+            if (response.ok) return response.json();
+            throw new Error('Error fatching data')
+        });
 }
 
-export default {fetchCountries};
+// export default {fetchCountries};

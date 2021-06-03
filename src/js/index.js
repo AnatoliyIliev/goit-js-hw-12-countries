@@ -1,10 +1,12 @@
+import '../sass/main.scss';
 import countriesCardTpl from '../templates/countries-cards.hbs';
 import countriesName from '../templates/countri-name.hbs';
-import API from './fetchCountries.js';
+import fetchCountries from './fetchCountries.js';
 import getRefs from './get-refs.js';
 
 import '@pnotify/core/dist/BrightTheme.css';
-const{ error } = require('@pnotify/core');
+import { error} from '@pnotify/core';
+// const{ error } = require('@pnotify/core');
 
 var debounce = require('lodash.debounce');
 
@@ -17,39 +19,47 @@ function onSearch(e) {
     clearContainer();
 
     const searchQuery = e.target.value;
-    console.log(API.fetchCountries(searchQuery))
+    // console.log(API.fetchCountries(searchQuery))
 
-    API.fetchCountries(searchQuery)
-    .then(renderCountriCard)
-    .catch(onFetchError)
+    fetchCountries(searchQuery)
+        .then(data => {
+            if (data.length > 10) {
+                onFetchError('To many matches found. Pleas enter a more specific query!')
+                return;
+            }
+            if (data.length <= 10 && data.length > 1) {
+                buildListMarkupOne(data);
+                return;
+            }
+            if (data.length === 1) {
+                buildListMarkup(data);
+                return;
+            }
+        })
+        .catch(onFetchError);
 }
 
-function renderCountriCard(data) {
-    console.log(data)
-    if (data.length > 10) {
-        error({
-            text: 'To many matches found. Pleas enter a more specific query!'
-        }); 
-    }
-    else if (data.length === 1) {
-        buildListMarkup(data, countriesCardTpl)
-    }
-    else if (data.length <= 10) {
-        buildListMarkup(data, countriesName)
-    }    
+function buildListMarkupOne(countryes) {
+  const markupOne = countriesName(countryes);
+  refs.cardContainer.innerHTML = markupOne;
 }
 
-
-function buildListMarkup(countryes, template) {
-  const markup = countryes.map(count => template(count)).join();
-  refs.cardConteiner.innerHTML = markup;
+function buildListMarkup(countryes) {
+  const markup = countriesCardTpl(countryes);
+  refs.cardContainer.innerHTML = markup;
 }
 
-function onFetchError(error) {    
-      const Error = "You must enter query parameters!"    
-      console.log(Error)  
+// function buildListMarkup(countryes, template) {
+//   const markup = countryes.map(count => template(count)).join();
+//   refs.cardContainer.innerHTML = markup;
+// }
+
+function onFetchError(e) {
+    error({ text: `${e}`, delay: 2000 })
 }
 
 function clearContainer() {
-  refs.cardConteiner.innerHTML = '';
+  refs.cardContainer.innerHTML = '';
 }
+
+// "You must enter query parameters!"

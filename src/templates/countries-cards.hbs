@@ -1,17 +1,22 @@
-<div>
-    <h1>{{name}}</h1>
-    <div>
-        <img src="{{flag}}" alt="{{name}}" >
-    </div>
-    <div>
-        <p><b>Capital: </b>{{capital}}</p>
-        <p><b>Population: </b>{{population}}</p>
-        <p><b>Languages: </b>
-            <ul>
-            {{#each languages}}
-                <li>{{name}}</li>
-            {{/each}}   
-            </ul>
-        </p>
+
+{{#each this}}
+<div class="center">
+    <h1 class="header">{{name}}</h1>
+    <div class="flex">        
+        <div class="list">
+            <p><b>Capital: </b>{{capital}}</p>
+            <p><b>Population: </b>{{population}}</p>
+            <p><b>Languages: </b>
+                <ul>
+                {{#each languages}}
+                    <li>{{name}}</li>
+                {{/each}}   
+                </ul>
+            </p>
+        </div>
+        <div class="flag">
+            <img width="450" src="{{flag}}" alt="{{name}}">
+        </div>
     </div>
 </div>
+{{/each}}
